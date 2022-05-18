@@ -36,10 +36,26 @@ class PostController extends Controller
             $post->user_id = $request->user_id;
             $post->title = $request->title;
             $post->body = $request->body;
-
-            if ($post -> save())
-            {
-                return response()->json(['status' => 'success', 'message' => 'Post updated successfully@']);
+            $user_id = $post->user_id;
+            $user_detail = User_Detail::where('user_id', '=' , $user_id);
+            $user_type = $user_detail->user_type;
+            if($user_type == 1){
+                if ($user -> save())
+                {
+                    return response()->json(['status' => 'success', 'message' => 'Post updated successfully']);
+                }
+            }
+            else{
+                $user = User :: findOrFail($request->user_id);
+                $userId = $user -> id;
+                if($user_id == $userId){
+                    if ($user -> save())
+                    {
+                        return response()->json(['status' => 'success', 'message' => 'Post updated successfully']);
+                    }                }
+                else{
+                    return response()->json(['status' => 'error', 'message' => 'Post can\'t be updated']);
+                }
             }
         } catch(\Exception $e)
         {
@@ -51,9 +67,26 @@ class PostController extends Controller
     {
         try {
             $post = Post::findOrFail($id);
-            if ($post -> delete())
-            {
-                return response()->json(['status' => 'success', 'message' => 'Post deleted successfully@']);
+            $user_id = $post->user_id;
+            $user_detail = User_Detail::where('user_id', '=' , $user_id);
+            $user_type = $user_detail->user_type;
+            if($user_type == 1){
+                if ($user -> delete())
+                {
+                    return response()->json(['status' => 'success', 'message' => 'Post deleted successfully']);
+                }
+            }
+            else{
+                $user = User :: findOrFail($request->user_id);
+                $userId = $user -> id;
+                if($user_id == $userId){
+                    if ($user -> delete())
+                    {
+                        return response()->json(['status' => 'success', 'message' => 'Post deleted successfully']);
+                    }                }
+                else{
+                    return response()->json(['status' => 'error', 'message' => 'Post can\'t be deleted']);
+                }
             }
         } catch(\Exception $e)
         {

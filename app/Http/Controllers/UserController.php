@@ -51,11 +51,20 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-
-            if ($user -> delete())
-            {
-                return response()->json(['status' => 'success', 'message' => 'User deleted successfully']);
+            $user_id = $user->id;
+            $user_detail = User_Detail::where('user_id', '=' , $user_id);
+            $user_type = $user_detail->user_type;
+            if($user_type == 1){
+                if ($user -> delete())
+                {
+                    return response()->json(['status' => 'success', 'message' => 'User deleted successfully']);
+                }
             }
+            else{
+                return response()->json(['status' => 'error', 'message' => 'User can\'t be deleted']);
+            }
+
+            
         } catch(\Exception $e)
         {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

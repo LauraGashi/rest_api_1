@@ -37,9 +37,26 @@ class ReplyController extends Controller
             $reply->post_id = $request->post_id;
             $reply->comment = $request->comment;
 
-            if ($reply -> save())
-            {
-                return response()->json(['status' => 'success', 'message' => 'Reply updated successfully@']);
+            $user_id = $reply->user_id;
+            $user_detail = User_Detail::where('user_id', '=' , $user_id);
+            $user_type = $user_detail->user_type;
+            if($user_type == 1){
+                if ($user -> save())
+                {
+                    return response()->json(['status' => 'success', 'message' => 'Reply updated successfully']);
+                }
+            }
+            else{
+                $user = User :: findOrFail($request->user_id);
+                $userId = $user -> id;
+                if($user_id == $userId){
+                    if ($user -> save())
+                    {
+                        return response()->json(['status' => 'success', 'message' => 'Reply updated successfully']);
+                    }                }
+                else{
+                    return response()->json(['status' => 'error', 'message' => 'Reply can\'t be updated']);
+                }
             }
         } catch(\Exception $e)
         {
@@ -51,10 +68,26 @@ class ReplyController extends Controller
     {
         try {
             $reply = Reply::findOrFail($id);
-
-            if ($reply -> delete())
-            {
-                return response()->json(['status' => 'success', 'message' => 'Reply deleted successfully@']);
+            $user_id = $reply->user_id;
+            $user_detail = User_Detail::where('user_id', '=' , $user_id);
+            $user_type = $user_detail->user_type;
+            if($user_type == 1){
+                if ($user -> delete())
+                {
+                    return response()->json(['status' => 'success', 'message' => 'Reply deleted successfully']);
+                }
+            }
+            else{
+                $user = User :: findOrFail($request->user_id);
+                $userId = $user -> id;
+                if($user_id == $userId){
+                    if ($user -> delete())
+                    {
+                        return response()->json(['status' => 'success', 'message' => 'Reply deleted successfully']);
+                    }}
+                else{
+                    return response()->json(['status' => 'error', 'message' => 'Reply can\'t be deleted']);
+                }
             }
         } catch(\Exception $e)
         {
