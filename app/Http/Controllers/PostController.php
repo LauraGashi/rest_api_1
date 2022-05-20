@@ -40,7 +40,7 @@ class PostController extends Controller
             $user_detail = User_Detail::where('user_id', '=' , $user_id);
             $user_type = $user_detail->user_type;
             if($user_type == 1){
-                if ($user -> save())
+                if ($post -> save())
                 {
                     return response()->json(['status' => 'success', 'message' => 'Post updated successfully']);
                 }
@@ -49,7 +49,7 @@ class PostController extends Controller
                 $user = User :: findOrFail($request->user_id);
                 $userId = $user -> id;
                 if($user_id == $userId){
-                    if ($user -> save())
+                    if ($post -> save())
                     {
                         return response()->json(['status' => 'success', 'message' => 'Post updated successfully']);
                     }                }
@@ -71,7 +71,7 @@ class PostController extends Controller
             $user_detail = User_Detail::where('user_id', '=' , $user_id);
             $user_type = $user_detail->user_type;
             if($user_type == 1){
-                if ($user -> delete())
+                if ($post -> delete())
                 {
                     return response()->json(['status' => 'success', 'message' => 'Post deleted successfully']);
                 }
@@ -80,7 +80,7 @@ class PostController extends Controller
                 $user = User :: findOrFail($request->user_id);
                 $userId = $user -> id;
                 if($user_id == $userId){
-                    if ($user -> delete())
+                    if ($post -> delete())
                     {
                         return response()->json(['status' => 'success', 'message' => 'Post deleted successfully']);
                     }                }
